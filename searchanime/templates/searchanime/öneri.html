@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Anime Recommendations</title>
+    {% load static %}
+    <style>
+        body {
+            background-image: url("{% static 'images/16951.jpeg' %}");
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .recommendations-container {
+            background: rgba(241,207,249, 0.83);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+        .recommendations-container h1 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        .recommendations-container ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .recommendations-container li {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .recommendations-container li:last-child {
+            border-bottom: none;
+        }
+        .recommendations-container a, .recommendations-container button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #8700a8;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .recommendations-container a:hover, .recommendations-container button:hover {
+            background-color: #d66bcb;
+        }
+
+        @media (max-width: 600px) {
+            .recommendations-container {
+                width: 95%;
+                padding: 15px;
+            }
+            .recommendations-container h1 {
+                font-size: 1.2em;
+            }
+            .recommendations-container li {
+                padding: 8px;
+            }
+            .recommendations-container a, .recommendations-container button {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="recommendations-container">
+        <h1>önerilen animeler</h1>
+        {% if öneriler %}
+            <ul>
+                {% for anime in öneriler %}
+                    <li>
+                        {{ anime.english_name }} - 
+                        <div style="display: inline-block; width: 100px; height: 20px; background: linear-gradient(to right, green {{ anime.sim_scores|floatformat:2 }}%, red {{ anime.sim_scores|floatformat:2 }}%); border-radius: 8px;">
+                            <span style="color: white; padding-left: 5px; font-size: 13px;">{{ anime.sim_scores|floatformat:2}}%</span>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            {% if not no_more_recommendations %}
+                <form method="post" action="{% url 'öneri_view' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="anime_name" value="{{ anime_name }}">
+                    <input type="hidden" name="offset" value="{{ offset }}">
+                    <button type="submit">daha fazla öneri</button>
+                </form>
+            {% else %}
+                <p>bu anime için daha fazla önerimiz yok.</p>
+            {% endif %}
+        {% else %}
+            <p>bu anime için daha fazla önerimiz yok.</p>
+        {% endif %}
+        <a href="{% url 'search_view' %}">yeni anime arat</a>
+    </div>
+</body>
+</html>

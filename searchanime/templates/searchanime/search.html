@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Search</title>
+    {% load static %}
+    <style>
+        body {
+            background-image: url("{% static 'images/16951.jpeg' %}");
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
+        .search-container {
+            background: rgba(241,207,249, 0.78);
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            width: 90%;
+            max-width: 350px;
+            height: auto;
+            margin: auto;
+        }
+        .search-container h1 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        .search-container input[type="text"] {
+            padding: 10px;
+            width: 90%; /* Adjusted width */
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+        }
+        .search-container button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #8700a8;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .search-container button:hover {
+            background-color: #d66bcb;
+        }
+        .search-container button {
+            outline: none; 
+        }
+        #suggestions {
+            max-height: 130px;
+            position: absolute;
+            overflow-y: scroll;
+            background-color: white;
+            width: 80%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            top: 118px;
+            list-style-type: none;
+            padding-left: 0;
+            border-radius: 5px;
+        }
+        #suggestions li {
+            padding: 5px;
+            cursor: pointer;
+            border-bottom: 1px solid #b6b6b6;
+        }
+        #suggestions li:last-child {
+            border-bottom: none;
+        }
+        #suggestions li:hover {
+            background-color: #eee;
+        }
+
+        @media (max-width: 600px) {
+            .search-container {
+                width: 80%;
+            }
+            .search-container input[type="text"] {
+                width: 80%;
+            }
+        }
+
+        @media (min-width: 600px) {
+            .search-container {
+                width: 50%;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .search-container {
+                width: 40%;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .search-container {
+                width: 30%;
+            }
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="search-container">
+        <h1>bir anime adı giriniz</h1>
+        <input type="text" id="search-bar" placeholder="anime ismi girin...">
+        <ul id="suggestions"></ul>
+        <form method="post" action="{% url 'öneri_view' %}">
+            {% csrf_token %}
+            <input type="hidden" id="anime_name" name="anime_name">
+            <button type="submit">search</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('search-bar').addEventListener('input', function() {
+            var query = this.value;
+            if (query.length > 2) {  // En az 3 karakter girildiğinde öneri getir
+                fetch(`/autocomplete/?term=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        var suggestions = document.getElementById('suggestions');
+                        suggestions.innerHTML = '';
+                        data.forEach(function(item) {
+                            var li = document.createElement('li');
+                            li.textContent = item;
+                            li.addEventListener('click', function() {
+                                document.getElementById('search-bar').value = item;
+                                document.getElementById('anime_name').value = item;
+                                suggestions.innerHTML = '';
+                            });
+                            suggestions.appendChild(li);
+                        });
+                    });
+            } else {
+                document.getElementById('suggestions').innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>
