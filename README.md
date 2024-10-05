@@ -14,7 +14,7 @@ This project is a Django application for managing and searching anime data.
 ### Installation
 1. Clone the repository:
     ```sh
-    git clone <repository-url>
+    git clone (https://github.com/ahmettsadik/Son_sonform)
     cd myproject
     ```
 
