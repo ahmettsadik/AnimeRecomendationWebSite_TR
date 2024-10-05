@@ -1,7 +1,7 @@
 # MyProject
 
 ## Description
-This project is a Django application for managing and searching anime data.
+This project is a Django application that recommends animes based on the user's liked animes.
 
 ## Project Structure
 
@@ -14,8 +14,8 @@ This project is a Django application for managing and searching anime data.
 ### Installation
 1. Clone the repository:
     ```sh
-    git clone (https://github.com/ahmettsadik/Son_sonform)
-    cd myproject
+    git clone (https://github.com/ahmettsadik/AnimeRecomendationWebSite_TR)
+    cd AnimeRecomendationWebSite_TR
     ```
 
 2. Install the required packages:
@@ -41,5 +41,6 @@ This project is a Django application for managing and searching anime data.
 ## Usage
 Access the application at `http://127.0.0.1:8000/`.
 
-## License
-This project is licensed under the MIT License.
+- [Ahmet Sadık Demirci](https://github.com/ahmettsadik)
+- [Furkan Aktay](https://github.com/furkanaktayy)
+- [Kaan Yılmaz](https://github.com/khanbelievable)
